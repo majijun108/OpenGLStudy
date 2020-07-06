@@ -1,0 +1,12 @@
+﻿  main.cpp
+E:\OpenGL\LearOpenGL1\LearOpenGL1\Mesh.h(77,50): warning C4244: “参数”: 从“unsigned int”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(264,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(267,21): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(438,16): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(439,16): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(442,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(443,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(444,15): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(445,15): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(452,34): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  LearOpenGL1.vcxproj -> E:\OpenGL\LearOpenGL1\Debug\LearOpenGL1.exe
