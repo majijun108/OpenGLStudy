@@ -310,7 +310,7 @@ int main()
 		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 		//渲染灯光物体
-		lightProgram.use();
+		/*lightProgram.use();
 		glm::mat4 lightModel;
 		lightModel = glm::translate(lightModel, lightWorldPos);
 		lightModel = glm::scale(lightModel, glm::vec3(0.2f));
@@ -318,7 +318,7 @@ int main()
 		lightProgram.set_mat4("view", glm::value_ptr(mainCamera.get_view_matrix()));
 		lightProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
 		lightProgram.set_vec3("lightColor", lightColor);
-		mesh.Draw(lightProgram);
+		mesh.Draw(lightProgram);*/
 
 		glfwPollEvents();//检测鼠标键盘输入
 		glfwSwapBuffers(window);//交换颜色缓冲
