@@ -1,3 +1,5 @@
+
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -11,6 +13,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Mesh.h"
+#include "Model.h"
 
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
@@ -52,8 +55,8 @@ int main()
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, curson_position_callback);
 	glfwSetScrollCallback(window, mouse_scroll_callback);
-
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//隐藏鼠标
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	//初始化GLAD 管理opengl函数指针
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -244,6 +247,7 @@ int main()
 	};
 
 	Mesh mesh(meshVertices,indices,textures);
+	Model robot("../Models/Robot/nanosuit.obj");
 
 	Shader shaderProgram("vert.vert", "frag.frag");
 
@@ -256,7 +260,6 @@ int main()
 	//光源模型
 	//unsigned int lightVAO = create_vao(vertices, sizeof(vertices), indices_old, sizeof(indices_old));
 	Shader lightProgram("lightVert.vert", "lightFrag.frag");
-
 
 	//绘制前的设置
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//线框模式
@@ -291,7 +294,7 @@ int main()
 		shaderProgram.set_float("light.constant", 1.0f);
 		shaderProgram.set_float("light.linear", 0.09f);
 		shaderProgram.set_float("light.quadratic", 0.032f);
-		shaderProgram.set_float("material.shininess", 32.0f);
+		shaderProgram.set_float("material.shininess", 2.0f);
 		//矩阵变换
 		glm::mat4 model = glm::mat4(1.0f);
 		shaderProgram.set_mat4("model", glm::value_ptr(model));
@@ -300,6 +303,7 @@ int main()
 
 		shaderProgram.set_vec3("viewWorldPos", mainCamera.position);
 		mesh.Draw(shaderProgram);
+		robot.Draw(shaderProgram);
 		//shaderProgram.set_float("mixValue", texture_mix);
 		/*glm::mat4 model;
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
@@ -310,8 +314,8 @@ int main()
 		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 		//渲染灯光物体
-		/*lightProgram.use();
-		glm::mat4 lightModel;
+		//lightProgram.use();
+		/*glm::mat4 lightModel;
 		lightModel = glm::translate(lightModel, lightWorldPos);
 		lightModel = glm::scale(lightModel, glm::vec3(0.2f));
 		lightProgram.set_mat4("model", glm::value_ptr(lightModel));
@@ -320,8 +324,8 @@ int main()
 		lightProgram.set_vec3("lightColor", lightColor);
 		mesh.Draw(lightProgram);*/
 
-		glfwPollEvents();//检测鼠标键盘输入
 		glfwSwapBuffers(window);//交换颜色缓冲
+		glfwPollEvents();//检测鼠标键盘输入
 	}
 
 	//资源清理
@@ -368,7 +372,7 @@ unsigned int load_texture(const char* path,int pos,int tex_type)
 {
 	unsigned int texture; 
 	glGenTextures(1, &texture);
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

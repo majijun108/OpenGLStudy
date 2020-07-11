@@ -10,11 +10,13 @@
 #include <string>
 #include <vector>
 
+
 struct Vertex
 {
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
+	Vertex() {};
 	Vertex(glm::vec3 pos,glm::vec3 nor,glm::vec2 uv) 
 	{
 		this->Position = pos;
@@ -33,6 +35,8 @@ struct Texture
 {
 	unsigned int id;
 	string type;
+	string path;
+	Texture() {}
 	Texture(unsigned int id,string type) 
 	{
 		this->id = id;
@@ -74,7 +78,7 @@ public:
 				number = std::to_string(specularNr++);
 			}
 
-			shader.set_float("material." + name + number, i);
+			shader.set_int("material." + name + number, i);
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}
 		glActiveTexture(GL_TEXTURE0);
@@ -99,7 +103,6 @@ private:
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
 		//∂•µ„Œª÷√
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 		glEnableVertexAttribArray(0);

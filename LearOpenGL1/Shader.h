@@ -45,12 +45,12 @@ public:
 		const char* vShaderCode = vertexSource.c_str();
 		const char* fShaderCode = fragmentSource.c_str();
 
-		int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertexShader, 1, &vShaderCode, NULL);
 		glCompileShader(vertexShader);
 		check_shader_compile(GL_VERTEX_SHADER, "VERTEX");
 
-		int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(fragmentShader, 1, &fShaderCode, NULL);
 		glCompileShader(fragmentShader);
 		check_shader_compile(GL_FRAGMENT_SHADER, "FRAGMENT");
