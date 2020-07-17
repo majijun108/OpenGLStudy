@@ -19,7 +19,7 @@ class Model
 		{
 			load_model(path);
 		}
-		void Draw(Shader shader) 
+		void Draw(Shader &shader) 
 		{
 			for (unsigned int i = 0; i < meshes.size(); i++)
 			{
