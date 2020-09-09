@@ -82,4 +82,10 @@ void main()
 		result = emission;
 	}*/
 	fragColor = vec4(result,1);
+	//屏幕坐标
+	/*if(gl_FragCoord.x < 960){
+		fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	}else{
+		fragColor = vec4(0.0, 1.0, 0.0, 1.0);
+	}*/
 }

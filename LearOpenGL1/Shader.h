@@ -96,6 +96,13 @@ public:
 		int vlocation = glGetUniformLocation(ID, u_name.c_str());
 		glUniform3fv(vlocation, 1, &value[0]);
 	}
+	//将shader中的uniform块绑定到value绑定点
+	void bind_uniform_block(string block_name,int value) 
+	{
+		unsigned int blockIndex = glGetUniformBlockIndex(ID, block_name.c_str());
+		glUniformBlockBinding(ID, blockIndex, value);
+	}
+
 	~Shader();
 
 private:

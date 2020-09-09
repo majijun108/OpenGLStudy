@@ -14,6 +14,9 @@
 #include "Camera.h"
 #include "Mesh.h"
 #include "Model.h"
+#include "SkyBox.h"
+#include "FrameBuffer.h"
+#include "UniformBlock.h"
 
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
@@ -37,6 +40,110 @@ unsigned int create_vao(float* vertices, int v_length, unsigned int* indices, in
 unsigned int load_texture(const char* path,int pos,int tex_type);
 //加载天空盒
 unsigned int load_cube_map(vector<string> faces);
+
+//旧的渲染代码
+void OLD_Render() 
+{
+	//glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.FBO);
+	//glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_STENCIL_TEST);
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);//设置清空屏幕所用的颜色
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	////glUseProgram(shaderProgram);
+	////glBindVertexArray(VAO);
+	////glDrawArrays(GL_TRIANGLES, 0,3);
+	////glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	///*glActiveTexture(0);
+	//glBindTexture(GL_TEXTURE_2D, specularTexture);
+	//glActiveTexture(1);
+	//glBindTexture(GL_TEXTURE_2D, specularTexture);*/
+	////渲染天空盒
+
+	//glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	//glStencilMask(0xFF);
+	//shaderProgram.use();
+	//shaderProgram.set_vec3("light.position", lightWorldPos);
+	//glm::vec3 lightAmbient = lightColor * glm::vec3(0.3f);
+	//glm::vec3 lightDiff = lightColor * glm::vec3(0.8f);
+	//shaderProgram.set_vec3("light.ambient", lightAmbient);
+	//shaderProgram.set_vec3("light.diffuse", lightDiff);
+	//shaderProgram.set_vec3("light.specular", glm::vec3(1.0f));
+	//shaderProgram.set_float("light.constant", 1.0f);
+	//shaderProgram.set_float("light.linear", 0.09f);
+	//shaderProgram.set_float("light.quadratic", 0.032f);
+	//shaderProgram.set_float("material.shininess", 2.0f);
+	////矩阵变换
+	//glm::mat4 model = glm::mat4(1.0f);
+	//shaderProgram.set_mat4("model", glm::value_ptr(model));
+	//shaderProgram.set_mat4("view", glm::value_ptr(mainCamera.get_view_matrix()));
+	//shaderProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
+
+	//shaderProgram.set_vec3("viewWorldPos", mainCamera.position);
+	//mesh.Draw(shaderProgram);
+
+	//glStencilMask(0x00);
+	//model = glm::translate(model, glm::vec3(1.0f, -1.0f, 0.0f));
+	//model = glm::scale(model, glm::vec3(0.1f));
+	//shaderProgram.set_mat4("model", glm::value_ptr(model));
+	//robot.Draw(shaderProgram);
+
+	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	//glStencilMask(0x00);
+	//glDisable(GL_DEPTH_TEST);
+	//lightProgram.use();
+	//glm::mat4 model1 = glm::mat4(1.0f);
+	//model1 = glm::scale(model1, glm::vec3(1.01f));
+	//lightProgram.set_mat4("model", glm::value_ptr(model1));
+	//lightProgram.set_mat4("view", glm::value_ptr(mainCamera.get_view_matrix()));
+	//lightProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
+	//lightProgram.set_vec3("lightColor", lightColor);
+	//mesh.Draw(lightProgram);
+	//glStencilMask(0xFF);
+	//glEnable(GL_DEPTH_TEST);
+	////shaderProgram.set_float("mixValue", texture_mix);
+	///*glm::mat4 model;
+	//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+	//shaderProgram.set_mat4("model", glm::value_ptr(model));*/
+	///*glBindVertexArray(VAO1);
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);*/
+	////glBindVertexArray(VAO2);
+	////glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+
+	//glDepthFunc(GL_LEQUAL);
+	//skyboxProgram.use();
+	////glm::mat4 modelsky = glm::mat4(1.0f);
+	////modelsky = glm::scale(modelsky, glm::vec3(10));
+	////skyboxProgram.set_mat4("model", glm::value_ptr(modelsky));
+	//skyboxProgram.set_mat4("view", glm::value_ptr(glm::mat4(glm::mat3(mainCamera.get_view_matrix()))));
+	//skyboxProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
+	//skyBox.Draw(skyboxProgram);
+	////渲染灯光物体
+	////lightProgram.use();
+	///*glm::mat4 lightModel;
+	//lightModel = glm::translate(lightModel, lightWorldPos);
+	//lightModel = glm::scale(lightModel, glm::vec3(0.2f));
+	//lightProgram.set_mat4("model", glm::value_ptr(lightModel));
+	//lightProgram.set_mat4("view", glm::value_ptr(mainCamera.get_view_matrix()));
+	//lightProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
+	//lightProgram.set_vec3("lightColor", lightColor);
+	//mesh.Draw(lightProgram);*/
+
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//////回到默认帧缓冲
+	//////渲染quad的mesh 将上面帧缓冲生产的图像 在这个mesh中渲染
+	//glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_STENCIL_TEST);
+	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	////我用了 模板和深度的渲染缓冲 这里一定要清除掉 或者直接关掉模板和深度测试
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	//quadShader.use();
+	//glBindVertexArray(renderMesh.VAO);
+	//glBindTexture(GL_TEXTURE_2D, frameBuffer.Render_Texture);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
 
 int main() 
 {
@@ -242,24 +349,19 @@ int main()
 	};
 	
 	//帧缓冲mesh顶点
-	float quadVertices[] = {
-		// positions   // texCoords
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
+	//float quadVertices[] = {
+	//	// positions   // texCoords
+	//	-1.0f,  1.0f,  0.0f, 1.0f,
+	//	-1.0f, -1.0f,  0.0f, 0.0f,
+	//	 1.0f, -1.0f,  1.0f, 0.0f,
 
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f,  1.0f, 1.0f
-	};
+	//	-1.0f,  1.0f,  0.0f, 1.0f,
+	//	 1.0f, -1.0f,  1.0f, 0.0f,
+	//	 1.0f,  1.0f,  1.0f, 1.0f
+	//};
 	//unsigned int VAO1 = create_vao(vertices,sizeof(vertices) ,indices,sizeof(indices));
-	unsigned int texture = load_texture("../Textures/container2.png",0,GL_RGBA);
-	unsigned int specularTexture = load_texture("../Textures/container2_specular.png", 1, GL_RGBA);
-	vector<Texture> textures = {
-		Texture(texture,"texture_diffuse"),
-		Texture(specularTexture,"texture_specular")
-	};
 #pragma region 天空盒
+	/*
 	float skyboxVertices[] = {
 		// positions          
 		-1.0f,  1.0f, -1.0f,
@@ -323,14 +425,46 @@ int main()
 	glBufferData(GL_ARRAY_BUFFER,sizeof(skyboxVertices),skyboxVertices,GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	*/
 #pragma endregion 天空盒
 
-	Mesh mesh(meshVertices,indices,textures);
+	Mesh mesh(meshVertices,indices, {
+		Texture("../Textures/container2.png","texture_diffuse"),
+		Texture("../Textures/container2_specular.png","texture_specular")
+	});
 	Model robot("../Models/Robot/nanosuit.obj");
+	SkyBox skyBox({
+		"../Textures/skybox/right.jpg",
+		"../Textures/skybox/left.jpg",
+		"../Textures/skybox/top.jpg",
+		"../Textures/skybox/bottom.jpg",
+		"../Textures/skybox/front.jpg",
+		"../Textures/skybox/back.jpg"
+	});
+	Mesh renderMesh(
+	{
+		Vertex(-1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f),
+		Vertex(-1.0f,-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
+		Vertex( 1.0f,-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f),
+		Vertex( 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f),
+	},{0,1,2,2,3,0});
+	FrameBuffer frameBuffer(SCR_WIDTH, SCR_HEIGHT);
 
 	Shader shaderProgram("vert.vert", "frag.frag");
 	Shader lightProgram("lightVert.vert", "lightFrag.frag");
 	Shader skyboxProgram("skyboxvert.vert", "skyboxfrag.frag");
+	Shader quadShader("frameBuff.vert", "frameBuff.frag");
+	quadShader.use();
+	quadShader.set_int("screenTexture", 0);
+
+	UniformBlock uniformBlock(2 * sizeof(glm::mat4),0);
+	shaderProgram.bind_uniform_block("Matices", 0);
+	//当相机发生的transform发生改变的时候 回调设置uniform块中的矩阵
+	mainCamera.on_transform_changed = [&uniformBlock]()
+	{
+		uniformBlock.SetUniformData(0, sizeof(glm::mat4), glm::value_ptr(mainCamera.get_projection_matrix()));
+		uniformBlock.SetUniformData(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(mainCamera.get_view_matrix()));
+	};
 
 	//shaderProgram.set_vec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
 	//shaderProgram.set_vec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
@@ -338,6 +472,7 @@ int main()
 	//shaderProgram.set_vec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 	//shaderProgram.set_int("material.specularTexture", 1);
 #pragma region 帧缓冲代码
+	/*
 	//帧缓冲代码
 	unsigned int FBO;
 	glGenFramebuffers(1, &FBO);
@@ -350,7 +485,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo_texture, 0);
-	//添加渲染缓冲对象
+	//添加渲染缓冲对象 只能写入 不能读取 用来储存深度和模板信息 速度相对于纹理 更快
 	unsigned int rbo;
 	glGenRenderbuffers(1, &rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
@@ -383,6 +518,7 @@ int main()
 	Shader quadShader("frameBuff.vert", "frameBuff.frag");
 	quadShader.use();
 	quadShader.set_int("screenTexture", 0);
+	*/
 #pragma endregion 帧缓冲代码
 
 
@@ -400,26 +536,13 @@ int main()
 		lastTime = currentTime;
 		process_input(window);//每帧开始 检测输入
 
-		//绑定一个新的帧缓冲 将图像渲染到这个帧缓冲
-		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_STENCIL_TEST);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		glClearColor(0.0f,0.0f,0.0f,1.0f);//设置清空屏幕所用的颜色
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_STENCIL_TEST);
+		//glEnable(GL_PROGRAM_POINT_SIZE);
 
-		//glUseProgram(shaderProgram);
-		//glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0,3);
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		/*glActiveTexture(0);
-		glBindTexture(GL_TEXTURE_2D, specularTexture);
-		glActiveTexture(1);
-		glBindTexture(GL_TEXTURE_2D, specularTexture);*/
-		//渲染天空盒
-
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
-		glStencilMask(0xFF);
+		//渲染箱子
 		shaderProgram.use();
 		shaderProgram.set_vec3("light.position", lightWorldPos);
 		glm::vec3 lightAmbient = lightColor * glm::vec3(0.3f);
@@ -434,78 +557,16 @@ int main()
 		//矩阵变换
 		glm::mat4 model = glm::mat4(1.0f);
 		shaderProgram.set_mat4("model", glm::value_ptr(model));
-		shaderProgram.set_mat4("view", glm::value_ptr(mainCamera.get_view_matrix()));
-		shaderProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
 
 		shaderProgram.set_vec3("viewWorldPos", mainCamera.position);
 		mesh.Draw(shaderProgram);
 
-		glStencilMask(0x00);
-		model = glm::translate(model, glm::vec3(1.0f,-1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.1f));
-		shaderProgram.set_mat4("model", glm::value_ptr(model));
-		robot.Draw(shaderProgram);
-
-		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		glStencilMask(0x00);
-		glDisable(GL_DEPTH_TEST);
-		lightProgram.use();
-		glm::mat4 model1 = glm::mat4(1.0f);
-		model1 = glm::scale(model1, glm::vec3(1.01f));
-		lightProgram.set_mat4("model", glm::value_ptr(model1));
-		lightProgram.set_mat4("view", glm::value_ptr(mainCamera.get_view_matrix()));
-		lightProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
-		lightProgram.set_vec3("lightColor", lightColor);
-		mesh.Draw(lightProgram);
-		glStencilMask(0xFF);
-		glEnable(GL_DEPTH_TEST);
-		//shaderProgram.set_float("mixValue", texture_mix);
-		/*glm::mat4 model;
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-		shaderProgram.set_mat4("model", glm::value_ptr(model));*/
-		/*glBindVertexArray(VAO1);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);*/
-		//glBindVertexArray(VAO2);
-		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-
+		//最后渲染天空盒
 		glDepthFunc(GL_LEQUAL);
 		skyboxProgram.use();
-		//glm::mat4 modelsky = glm::mat4(1.0f);
-		//modelsky = glm::scale(modelsky, glm::vec3(10));
-		//skyboxProgram.set_mat4("model", glm::value_ptr(modelsky));
 		skyboxProgram.set_mat4("view", glm::value_ptr(glm::mat4(glm::mat3(mainCamera.get_view_matrix()))));
 		skyboxProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
-		skyboxProgram.set_int("skybox", 0);
-
-		glBindVertexArray(skyVAO);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cube_map);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glDepthFunc(GL_LESS);
-		//渲染灯光物体
-		//lightProgram.use();
-		/*glm::mat4 lightModel;
-		lightModel = glm::translate(lightModel, lightWorldPos);
-		lightModel = glm::scale(lightModel, glm::vec3(0.2f));
-		lightProgram.set_mat4("model", glm::value_ptr(lightModel));
-		lightProgram.set_mat4("view", glm::value_ptr(mainCamera.get_view_matrix()));
-		lightProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
-		lightProgram.set_vec3("lightColor", lightColor);
-		mesh.Draw(lightProgram);*/
-		
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		////回到默认帧缓冲
-		////渲染quad的mesh 将上面帧缓冲生产的图像 在这个mesh中渲染
-		glDisable(GL_DEPTH_TEST);
-		glDisable(GL_STENCIL_TEST);
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		//我用了 模板和深度的渲染缓冲 这里一定要清除掉 或者直接关掉模板和深度测试
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-		quadShader.use();
-		glBindVertexArray(quadVAO);
-		glBindTexture(GL_TEXTURE_2D, fbo_texture);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		skyBox.Draw(skyboxProgram);
 
 		glfwSwapBuffers(window);//交换颜色缓冲
 		glfwPollEvents();//检测鼠标键盘输入

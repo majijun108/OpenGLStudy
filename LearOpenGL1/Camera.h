@@ -1,10 +1,11 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+//#include <glad/glad.h>
+//#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <string>
+#include <functional>
 using namespace std;
 
 enum CameraMoveDir
@@ -36,6 +37,8 @@ public:
 	float width_height_rate = 1920/1080.0f;
 	float min = 0.1f;
 	float max = 100.0f;
+
+	std::function<void()> on_transform_changed;
 
 	Camera(glm::vec3 pos = glm::vec3(0.0f,0.0f,0.0f),glm::vec3 world_up = glm::vec3(0.0f,1.0f,0.0f),float rotateX = 0.0f,float rotateY = 0.0f):position(pos), world_up(world_up),rotateX(rotateX),rotateY(rotateY)
 	{
@@ -127,5 +130,10 @@ private:
 		this->front = glm::normalize(front);
 		this->right = glm::normalize(glm::cross(this->front, this->world_up));
 		this->up = glm::normalize(glm::cross(this->right, this->front));
+
+		if (on_transform_changed != NULL)
+		{
+			on_transform_changed();
+		}
 	}
 };

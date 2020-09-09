@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Shader.h"
+#include "Texture.h"
 
 #include <string>
 #include <vector>
@@ -31,18 +32,18 @@ struct Vertex
 	}
 };
 
-struct Texture
-{
-	unsigned int id;
-	string type;
-	string path;
-	Texture() {}
-	Texture(unsigned int id,string type) 
-	{
-		this->id = id;
-		this->type = type;
-	}
-};
+//struct Texture
+//{
+//	unsigned int id;
+//	string type;
+//	string path;
+//	Texture() {}
+//	Texture(unsigned int id,string type) 
+//	{
+//		this->id = id;
+//		this->type = type;
+//	}
+//};
 
 class Mesh {
 public:
@@ -51,11 +52,18 @@ public:
 	vector<Texture> textures;
 	unsigned int VAO;
 
-	Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures) 
+	Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
 	{
 		this->vertices = vertices;
 		this->indices = indices;
 		this->textures = textures;
+		SetupMesh();
+	}
+
+	Mesh(vector<Vertex> vertices, vector<unsigned int> indices)
+	{
+		this->vertices = vertices;
+		this->indices = indices;
 		SetupMesh();
 	}
 
@@ -84,6 +92,7 @@ public:
 		glActiveTexture(GL_TEXTURE0);
 
 		glBindVertexArray(VAO);
+		//渲染点的时候 需要GL_POINTS
 		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
