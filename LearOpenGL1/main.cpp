@@ -18,6 +18,11 @@
 #include "FrameBuffer.h"
 #include "UniformBlock.h"
 
+#include "GeometryStudy.h"
+#include "InstanceStudy.h"
+#include "PlanetStrip.h"
+
+
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 float texture_mix;
@@ -428,43 +433,34 @@ int main()
 	*/
 #pragma endregion 天空盒
 
-	Mesh mesh(meshVertices,indices, {
-		Texture("../Textures/container2.png","texture_diffuse"),
-		Texture("../Textures/container2_specular.png","texture_specular")
-	});
-	Model robot("../Models/Robot/nanosuit.obj");
-	SkyBox skyBox({
-		"../Textures/skybox/right.jpg",
-		"../Textures/skybox/left.jpg",
-		"../Textures/skybox/top.jpg",
-		"../Textures/skybox/bottom.jpg",
-		"../Textures/skybox/front.jpg",
-		"../Textures/skybox/back.jpg"
-	});
-	Mesh renderMesh(
-	{
-		Vertex(-1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f),
-		Vertex(-1.0f,-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
-		Vertex( 1.0f,-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f),
-		Vertex( 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f),
-	},{0,1,2,2,3,0});
-	FrameBuffer frameBuffer(SCR_WIDTH, SCR_HEIGHT);
+	//Mesh mesh(meshVertices,indices, {
+	//	Texture("../Textures/container2.png","texture_diffuse"),
+	//	Texture("../Textures/container2_specular.png","texture_specular")
+	//});
+	//Model robot("../Models/Robot/nanosuit.obj");
+	//Mesh renderMesh(
+	//{
+	//	Vertex(-1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f),
+	//	Vertex(-1.0f,-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
+	//	Vertex( 1.0f,-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f),
+	//	Vertex( 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f),
+	//},{0,1,2,2,3,0});
+	//FrameBuffer frameBuffer(SCR_WIDTH, SCR_HEIGHT);
 
-	Shader shaderProgram("vert.vert", "frag.frag");
-	Shader lightProgram("lightVert.vert", "lightFrag.frag");
-	Shader skyboxProgram("skyboxvert.vert", "skyboxfrag.frag");
-	Shader quadShader("frameBuff.vert", "frameBuff.frag");
-	quadShader.use();
-	quadShader.set_int("screenTexture", 0);
+	//Shader shaderProgram("vert.vert", "frag.frag");
+	//Shader lightProgram("lightVert.vert", "lightFrag.frag");
+	//Shader quadShader("frameBuff.vert", "frameBuff.frag");
+	//quadShader.use();
+	//quadShader.set_int("screenTexture", 0);
 
-	UniformBlock uniformBlock(2 * sizeof(glm::mat4),0);
-	shaderProgram.bind_uniform_block("Matices", 0);
-	//当相机发生的transform发生改变的时候 回调设置uniform块中的矩阵
-	mainCamera.on_transform_changed = [&uniformBlock]()
-	{
-		uniformBlock.SetUniformData(0, sizeof(glm::mat4), glm::value_ptr(mainCamera.get_projection_matrix()));
-		uniformBlock.SetUniformData(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(mainCamera.get_view_matrix()));
-	};
+	//UniformBlock uniformBlock(2 * sizeof(glm::mat4),0);
+	//shaderProgram.bind_uniform_block("Matices", 0);
+	////当相机发生的transform发生改变的时候 回调设置uniform块中的矩阵
+	//mainCamera.on_transform_changed = [&uniformBlock]()
+	//{
+	//	uniformBlock.SetUniformData(0, sizeof(glm::mat4), glm::value_ptr(mainCamera.get_projection_matrix()));
+	//	uniformBlock.SetUniformData(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(mainCamera.get_view_matrix()));
+	//};
 
 	//shaderProgram.set_vec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
 	//shaderProgram.set_vec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
@@ -525,6 +521,19 @@ int main()
 	//光源模型
 	//unsigned int lightVAO = create_vao(vertices, sizeof(vertices), indices_old, sizeof(indices_old));
 
+	SkyBox skyBox({
+		"../Textures/skybox/right.jpg",
+		"../Textures/skybox/left.jpg",
+		"../Textures/skybox/top.jpg",
+		"../Textures/skybox/bottom.jpg",
+		"../Textures/skybox/front.jpg",
+		"../Textures/skybox/back.jpg"
+		});
+	Shader skyboxProgram("skyboxvert.vert", "skyboxfrag.frag");
+	/*UniformBlock uniformBlock(2 * sizeof(glm::mat4), 0);
+	GeometryStudy gStudy(&mainCamera,&uniformBlock);*/
+	InstanceStudy iStudy;
+
 	//绘制前的设置
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//线框模式
 	//渲染画面
@@ -542,24 +551,25 @@ int main()
 		glEnable(GL_STENCIL_TEST);
 		//glEnable(GL_PROGRAM_POINT_SIZE);
 
-		//渲染箱子
-		shaderProgram.use();
-		shaderProgram.set_vec3("light.position", lightWorldPos);
-		glm::vec3 lightAmbient = lightColor * glm::vec3(0.3f);
-		glm::vec3 lightDiff = lightColor * glm::vec3(0.8f);
-		shaderProgram.set_vec3("light.ambient", lightAmbient);
-		shaderProgram.set_vec3("light.diffuse", lightDiff);
-		shaderProgram.set_vec3("light.specular", glm::vec3(1.0f));
-		shaderProgram.set_float("light.constant", 1.0f);
-		shaderProgram.set_float("light.linear", 0.09f);
-		shaderProgram.set_float("light.quadratic", 0.032f);
-		shaderProgram.set_float("material.shininess", 2.0f);
-		//矩阵变换
-		glm::mat4 model = glm::mat4(1.0f);
-		shaderProgram.set_mat4("model", glm::value_ptr(model));
+		////渲染箱子
+		//shaderProgram.use();
+		//shaderProgram.set_vec3("light.position", lightWorldPos);
+		//glm::vec3 lightAmbient = lightColor * glm::vec3(0.3f);
+		//glm::vec3 lightDiff = lightColor * glm::vec3(0.8f);
+		//shaderProgram.set_vec3("light.ambient", lightAmbient);
+		//shaderProgram.set_vec3("light.diffuse", lightDiff);
+		//shaderProgram.set_vec3("light.specular", glm::vec3(1.0f));
+		//shaderProgram.set_float("light.constant", 1.0f);
+		//shaderProgram.set_float("light.linear", 0.09f);
+		//shaderProgram.set_float("light.quadratic", 0.032f);
+		//shaderProgram.set_float("material.shininess", 2.0f);
+		////矩阵变换
+		//glm::mat4 model = glm::mat4(1.0f);
+		//shaderProgram.set_mat4("model", glm::value_ptr(model));
 
-		shaderProgram.set_vec3("viewWorldPos", mainCamera.position);
-		mesh.Draw(shaderProgram);
+		//shaderProgram.set_vec3("viewWorldPos", mainCamera.position);
+		//mesh.Draw(shaderProgram);
+		iStudy.Render();
 
 		//最后渲染天空盒
 		glDepthFunc(GL_LEQUAL);

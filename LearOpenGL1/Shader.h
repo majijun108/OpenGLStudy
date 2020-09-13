@@ -11,39 +11,15 @@ class Shader
 {
 public:
 	unsigned int ID;
-	Shader(const char* vName, const char* fName)
+	Shader(const char* vName, const char* fName,const char* geometryShaderName = NULL)
 	{
 		string vertexPath = SHADER_PATH + vName;
 		string fragmentPath = SHADER_PATH + fName;
 
-		std::string vertexSource;
-		std::string fragmentSource;
-		std::ifstream vertexStream;
-		std::ifstream fragmentStream;
-
-		vertexStream.exceptions(std::ifstream::failbit| std::ifstream::badbit);
-		fragmentStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-		try
-		{
-			vertexStream.open(vertexPath);
-			fragmentStream.open(fragmentPath);
-
-			std::stringstream vStream, fStream;
-			vStream << vertexStream.rdbuf();
-			fStream << fragmentStream.rdbuf();
-
-			vertexStream.close();
-			fragmentStream.close();
-			vertexSource = vStream.str();
-			fragmentSource = fStream.str();
-		}
-		catch (const std::exception&)
-		{
-			std::cout << std::string(vertexPath) << std::endl;
-			std::cout << "ERROR:SHADER:READ FILE FAILED,VERTEX NAME:" << vertexPath << ",FRAGMENT PATH:" << fragmentPath << std::endl;
-		}
-		const char* vShaderCode = vertexSource.c_str();
-		const char* fShaderCode = fragmentSource.c_str();
+		string vStr = load_shader_source(vertexPath);
+		string fStr = load_shader_source(fragmentPath);
+		const GLchar* vShaderCode = vStr.c_str();
+		const GLchar* fShaderCode = fStr.c_str();
 
 		unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertexShader, 1, &vShaderCode, NULL);
@@ -58,11 +34,27 @@ public:
 		ID = glCreateProgram();
 		glAttachShader(ID, vertexShader);
 		glAttachShader(ID, fragmentShader);
+		unsigned int geometryShader;
+		if (geometryShaderName != NULL)
+		{
+			string gPath = SHADER_PATH + geometryShaderName;
+			string gStr = load_shader_source(gPath);
+			const GLchar* gShaderCode = gStr.c_str();
+			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+			glShaderSource(geometryShader, 1, &gShaderCode, NULL);
+			glCompileShader(geometryShader);
+			glAttachShader(ID, geometryShader);
+		}
+
 		glLinkProgram(ID);
 		check_shader_compile(ID, "PROGRAM");
 
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
+		if (geometryShaderName != NULL) 
+		{
+			glDeleteShader(geometryShader);
+		}
 	}
 	void use() 
 	{
@@ -130,6 +122,30 @@ private:
 				std::cout << "ERROR:SHADER:CREATE SHADER FAILED," << infoLog << std::endl;
 			}
 		}
+	}
+	string load_shader_source(string path) 
+	{
+		std::ifstream fileStream;
+		string result;
+
+		fileStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		try
+		{
+			fileStream.open(path);
+
+			std::stringstream sStream;
+			sStream << fileStream.rdbuf();
+
+			fileStream.close();
+			result = sStream.str();
+		}
+		catch (const std::exception&)
+		{
+			std::cout << std::string(path) << std::endl;
+			std::cout << "ERROR:SHADER:READ FILE FAILED,SHADER NAME:" << path << std::endl;
+		}
+
+		return result;
 	}
 };
 

@@ -1,12 +1,13 @@
 ﻿  main.cpp
 E:\OpenGL\LearOpenGL1\LearOpenGL1\Mesh.h(96,1): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(530,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(533,21): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(729,16): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(730,16): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(733,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(734,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(735,15): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(736,15): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(743,34): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\GeometryStudy.h(33,46): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(539,17): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(542,21): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(739,16): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(740,16): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(743,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(744,15): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(745,15): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(746,15): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\OpenGL\LearOpenGL1\LearOpenGL1\main.cpp(753,34): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
   LearOpenGL1.vcxproj -> E:\OpenGL\LearOpenGL1\x64\Debug\LearOpenGL1.exe

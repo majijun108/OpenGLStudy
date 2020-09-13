@@ -31,9 +31,15 @@ uniform vec3 objColor;
 uniform vec3 viewWorldPos;
 //uniform sampler2D emissionTexture;
 
-in vec3 normal;
+in GS_OUT
+{
+	vec3 normal;
+	vec2 ourUV;
+	vec3 vertWorldPos;
+}fs_in;
+/*in vec3 normal;
 in vec2 ourUV;
-in vec3 vertWorldPos;
+in vec3 vertWorldPos;*/
 void main()
 {
 	//vec4 mainColor = texture(mainTexture, ourUV);
@@ -58,24 +64,24 @@ void main()
 	//fragColor = mix(mainColor, sColor, mixValue); //* vec4(ourColor,1.0f);
 	//fragColor = vec4(ourColor, 1.0f);
 
-	vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse1,ourUV));
+	vec3 ambient = light.ambient * vec3(texture(material.texture_diffuse1,fs_in.ourUV));
 
-	vec3 lightWroldDir = normalize(light.position - vertWorldPos);
-	vec3 worldNormal = normalize(normal);
+	vec3 lightWroldDir = normalize(light.position - fs_in.vertWorldPos);
+	vec3 worldNormal = normalize(fs_in.normal);
 	float diff = max(dot(lightWroldDir,worldNormal),0);
-	vec3 diffuse = light.diffuse * vec3(texture(material.texture_diffuse1,ourUV)) * diff;
+	vec3 diffuse = light.diffuse * vec3(texture(material.texture_diffuse1,fs_in.ourUV)) * diff;
 
-	vec3 reflectDir = normalize(reflect(-lightWroldDir,normal));
-	vec3 viewDir = normalize(viewWorldPos - vertWorldPos);
+	vec3 reflectDir = normalize(reflect(-lightWroldDir,fs_in.normal));
+	vec3 viewDir = normalize(viewWorldPos - fs_in.vertWorldPos);
 	float spec = pow(max(dot(reflectDir,viewDir),0),material.shininess);
-	vec3 specular = light.specular * vec3(texture(material.texture_specular1,ourUV)) * spec;
+	vec3 specular = light.specular * vec3(texture(material.texture_specular1,fs_in.ourUV)) * spec;
 
 	vec3 result = ambient + diffuse + specular;
 
 	//计算点光源的强度
-	float distance = length(light.position - vertWorldPos);
-	float attenuation = 1/(light.constant + light.linear * distance + light.quadratic * distance * distance);
-	result = result * attenuation;
+	//float distance = length(light.position - vertWorldPos);
+	//float attenuation = 1/(light.constant + light.linear * distance + light.quadratic * distance * distance);
+	//result = result * attenuation;
 	/*vec3 emission = vec3(texture(emissionTexture,ourUV));
 	if(emission.x > 0)
 	{

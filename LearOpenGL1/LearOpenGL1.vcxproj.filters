@@ -65,6 +65,15 @@
     <ClInclude Include="UniformBlock.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="UniformStudy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryStudy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceStudy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LearOpenGL1.rc">

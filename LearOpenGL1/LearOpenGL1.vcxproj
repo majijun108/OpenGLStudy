@@ -161,6 +161,8 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FrameBuffer.h" />
+    <ClInclude Include="GeometryStudy.h" />
+    <ClInclude Include="InstanceStudy.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="resource.h" />
@@ -169,6 +171,7 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UniformBlock.h" />
+    <ClInclude Include="UniformStudy.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LearOpenGL1.rc" />
