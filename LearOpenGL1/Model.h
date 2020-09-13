@@ -15,6 +15,7 @@
 class Model 
 {
 	public:
+		vector<Mesh> meshes;
 		Model(string path) 
 		{
 			load_model(path);
@@ -27,8 +28,15 @@ class Model
 			}
 		}
 
+		void DrawInstance(Shader* shader,unsigned int &amount)
+		{
+			for (unsigned int i = 0; i < meshes.size(); i++)
+			{
+				meshes[i].DrawInstance(shader,amount);
+			}
+		}
+
 	private:
-		vector<Mesh> meshes;
 		string directory;
 
 		void load_model(string path) 
@@ -108,10 +116,16 @@ class Model
 				aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
 				vector<Texture> diffs = load_material_texture(material, aiTextureType_DIFFUSE, "texture_diffuse");
-				textures.insert(textures.end(), diffs.begin(), diffs.end());
+				if (!diffs.empty()) 
+				{
+					textures.insert(textures.end(), diffs.begin(), diffs.end());
+				}
 
 				vector<Texture> specs = load_material_texture(material, aiTextureType_SPECULAR, "texture_specular");
-				textures.insert(textures.end(), specs.begin(), specs.end());
+				if (!specs.empty())
+				{
+					textures.insert(textures.end(), specs.begin(), specs.end());
+				}
 			}
 
 			Mesh result_mesh(vertices, indices, textures);
@@ -121,6 +135,9 @@ class Model
 		vector<Texture> load_material_texture(aiMaterial* material, aiTextureType type, string typeName) 
 		{
 			vector<Texture> textures;
+			int tex_count = material->GetTextureCount(type);
+			if (tex_count <= 0)
+				return textures;
 			for (unsigned int i = 0; i < material->GetTextureCount(type); i++)
 			{
 				aiString path;

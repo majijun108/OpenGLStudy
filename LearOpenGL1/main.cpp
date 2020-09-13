@@ -27,9 +27,9 @@ const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 float texture_mix;
 float deltaTime;
-Camera mainCamera(glm::vec3(0, 0, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0, -180.0f);
 glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 glm::vec3 lightWorldPos(1.2f, 1.0f, 2.0f);
+Camera mainCamera(glm::vec3(0, 0, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0, -180.0f);
 
 //每次窗口大小被调整的时候调用
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -152,6 +152,7 @@ void OLD_Render()
 
 int main() 
 {
+	Camera::main = &mainCamera;
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -530,9 +531,10 @@ int main()
 		"../Textures/skybox/back.jpg"
 		});
 	Shader skyboxProgram("skyboxvert.vert", "skyboxfrag.frag");
-	/*UniformBlock uniformBlock(2 * sizeof(glm::mat4), 0);
-	GeometryStudy gStudy(&mainCamera,&uniformBlock);*/
-	InstanceStudy iStudy;
+	UniformBlock uniformBlock(2 * sizeof(glm::mat4), 0);
+	//ometryStudy gStudy(&uniformBlock);
+	//InstanceStudy iStudy;
+	PlanetStrip planet(&uniformBlock);
 
 	//绘制前的设置
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//线框模式
@@ -545,7 +547,7 @@ int main()
 		lastTime = currentTime;
 		process_input(window);//每帧开始 检测输入
 
-		glClearColor(0.0f,0.0f,0.0f,1.0f);//设置清空屏幕所用的颜色
+		glClearColor(0.1f,0.1f,0.1f,1.0f);//设置清空屏幕所用的颜色
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_STENCIL_TEST);
@@ -569,14 +571,16 @@ int main()
 
 		//shaderProgram.set_vec3("viewWorldPos", mainCamera.position);
 		//mesh.Draw(shaderProgram);
-		iStudy.Render();
+		//gStudy.Render();
+		//iStudy.Render();
+		planet.Render();
 
 		//最后渲染天空盒
-		glDepthFunc(GL_LEQUAL);
+		/*glDepthFunc(GL_LEQUAL);
 		skyboxProgram.use();
 		skyboxProgram.set_mat4("view", glm::value_ptr(glm::mat4(glm::mat3(mainCamera.get_view_matrix()))));
 		skyboxProgram.set_mat4("projection", glm::value_ptr(mainCamera.get_projection_matrix()));
-		skyBox.Draw(skyboxProgram);
+		skyBox.Draw(skyboxProgram);*/
 
 		glfwSwapBuffers(window);//交换颜色缓冲
 		glfwPollEvents();//检测鼠标键盘输入

@@ -18,6 +18,6 @@ out vec4 fColor;
 
 void main()
 {
-	vec3 color = texture(material.texture_diffuse1,fs_in.uv);
+	vec3 color = vec3(texture(material.texture_diffuse1,fs_in.uv));
 	fColor = vec4(color,1.0);
 }

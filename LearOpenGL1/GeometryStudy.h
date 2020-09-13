@@ -4,7 +4,7 @@ class GeometryStudy
 {
 public:
 	
-	GeometryStudy(Camera* camera, UniformBlock* uniformBlock);
+	GeometryStudy(UniformBlock* uniformBlock);
 	~GeometryStudy();
 
 	void Render() 
@@ -32,7 +32,7 @@ public:
 		//时间参数
 		shaderProgram.set_float("time", glfwGetTime());
 
-		shaderProgram.set_vec3("viewWorldPos", mainCamera->position);
+		shaderProgram.set_vec3("viewWorldPos", Camera::main->position);
 		robot.Draw(shaderProgram);
 	}
 
@@ -44,30 +44,28 @@ private:
 		 0.5f, -0.5f, 1.0f, 1.0f, 0.0f,// 右下
 		-0.5f, -0.5f, 1.0f, 0.0f, 1.0f  // 左下
 	};
-	unsigned int VAO;
+	unsigned int VAO;  
 	unsigned int VBO;
 	Shader shader;
 	Model robot;
 	Shader shaderProgram;
 	UniformBlock* uniformBlock;
-	Camera* mainCamera;
 
 	void InitModel()
 	{
 		shaderProgram.bind_uniform_block("Matices", 0);
 		//当相机发生的transform发生改变的时候 回调设置uniform块中的矩阵
-		mainCamera->on_transform_changed = [this]()
+		Camera::main->on_transform_changed.push_back([this]()
 		{
-			uniformBlock->SetUniformData(0, sizeof(glm::mat4), glm::value_ptr(this->mainCamera->get_projection_matrix()));
-			uniformBlock->SetUniformData(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(this->mainCamera->get_view_matrix()));
-		};
+			uniformBlock->SetUniformData(0, sizeof(glm::mat4), glm::value_ptr(Camera::main->get_projection_matrix()));
+			uniformBlock->SetUniformData(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(Camera::main->get_view_matrix()));
+		});
 	}
 };
 
-GeometryStudy::GeometryStudy(Camera* camera, UniformBlock* uniformBlock):shader("geometryVert.vert","geometryFrag.frag","geometryGS.gs")
+GeometryStudy::GeometryStudy(UniformBlock* uniformBlock):shader("geometryVert.vert","geometryFrag.frag","geometryGS.gs")
 ,robot("../Models/Robot/nanosuit.obj"), shaderProgram("vert.vert", "frag.frag","explodeGeo.gs")
 {
-	this->mainCamera = camera;
 	this->uniformBlock = uniformBlock;
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);

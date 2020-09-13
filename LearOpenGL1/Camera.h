@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <functional>
+#include <vector>
 using namespace std;
 
 enum CameraMoveDir
@@ -21,6 +22,7 @@ enum CameraMoveDir
 class Camera
 {
 public:
+	static Camera* main;
 	glm::vec3 position;
 	glm::vec3 world_up;
 	glm::vec3 front;
@@ -38,7 +40,7 @@ public:
 	float min = 0.1f;
 	float max = 100.0f;
 
-	std::function<void()> on_transform_changed;
+	std::vector<std::function<void()>> on_transform_changed;
 
 	Camera(glm::vec3 pos = glm::vec3(0.0f,0.0f,0.0f),glm::vec3 world_up = glm::vec3(0.0f,1.0f,0.0f),float rotateX = 0.0f,float rotateY = 0.0f):position(pos), world_up(world_up),rotateX(rotateX),rotateY(rotateY)
 	{
@@ -131,9 +133,18 @@ private:
 		this->right = glm::normalize(glm::cross(this->front, this->world_up));
 		this->up = glm::normalize(glm::cross(this->right, this->front));
 
-		if (on_transform_changed != NULL)
+		if (!on_transform_changed.empty())
 		{
-			on_transform_changed();
+			//for (auto&& e : on_transform_changed)s
+			//{
+			//	e();
+			//}
+
+			for (auto it = on_transform_changed.begin(); it != on_transform_changed.end(); ++it)
+			{
+				(*it)();
+			}
 		}
 	}
 };
+Camera* Camera::main = NULL;
